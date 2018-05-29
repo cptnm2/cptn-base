@@ -15,17 +15,16 @@ public class EncryptTest {
 	 */
 	@Test
 	public void testAes() throws Exception {
+		int keyLen = 128;
 		String key = "Dlg5794sp3cuidvpgakk773kdh201uty";
-		
-		AesEncoder enc = new AesEncoder(key, 128);
 		String origin = "Hello, and welcome to the 11th top gear special. 童鞋，欢迎使用AES加密！";
-		
-		origin = "zsoa###oi8Lxtx53wVkJ2gOSdVzc6t0lWo0###bc966520e19a4215a9114be15715cd59###1466575340851";
-		
+
+		AesEncoder enc = new AesEncoder(key, keyLen);
+		AesDecoder dec = new AesDecoder(key, keyLen);
+
 		String dest = Coder.encryptBASE64(enc.encode(origin.getBytes()));
 		System.out.println("Encrypted:\n" + dest);
 		
-		AesDecoder dec = new AesDecoder(key, 128);
 		String src = new String(dec.decode(Coder.decryptBASE64(dest)), "UTF-8").trim();
 		System.out.println("Decrypted:\n" + src);
 		

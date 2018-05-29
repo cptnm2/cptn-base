@@ -1,3 +1,5 @@
+@file:JvmName("StrUtil")
+
 package cptn.util
 
 import java.io.UnsupportedEncodingException
@@ -7,17 +9,8 @@ import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.*
 
-/**
- * 字符串工具类
- * @author cptn
- */
 object StrUtil {
-
-    /**
-     * Get system default CRLF
-     *
-     * @return
-     */
+    // 系统换行符
     val fileSep: String
         get() = System.getProperty("file.separator")
 
@@ -38,12 +31,8 @@ object StrUtil {
      * @return
      */
     fun isEmpty2(value: String?): Boolean {
-        var value = value
-        if (value != null) {
-            value = value.trim { it <= ' ' }
-        }
-
-        return null == value || "" == value
+        var s = value?.trim()
+        return null == s || "" == s
     }
 
     /**
@@ -274,8 +263,9 @@ object StrUtil {
         }
 
         try {
-            return String(param.toByteArray(charset("ISO8859_1")), Charset.forName("UTF-8"))
+            return String(param.toByteArray(Charset.forName("ISO8859_1")), Charset.forName("UTF-8"))
         } catch (e: UnsupportedEncodingException) {
+            println(e)
         }
 
         return ""
@@ -343,11 +333,10 @@ object StrUtil {
      * @return
      */
     fun getHead(src: String, maxCharLen: Int): String {
-        val title = src
         var len = 0
 
         for (i in 0 until src.length) {
-            if (StrUtil.isChinese(src[i])) {
+            if (isChinese(src[i])) {
                 len += 2
             } else {
                 len++
@@ -412,12 +401,11 @@ object StrUtil {
      * @param sep
      * @return
      */
-    @JvmOverloads
     fun joinStrs(list: List<String>, sep: String, leftQuote: String? = null, rightQuote: String? = null): String {
         val buff = StringBuffer()
 
-        val left = !StrUtil.isEmpty(leftQuote)
-        val right = !StrUtil.isEmpty(rightQuote)
+        val left = !isEmpty(leftQuote)
+        val right = !isEmpty(rightQuote)
 
         for (s in list) {
             if (buff.length > 0) {
@@ -561,7 +549,7 @@ object StrUtil {
             return src
         }
 
-        if (StrUtil.isEmpty(src)) {
+        if (isEmpty(src)) {
             return src
         }
 
@@ -584,19 +572,19 @@ object StrUtil {
 
     /**
      * 判断密码强度
-     * @param password
+     * @param pswd
      * @param caseSensitive 是否区分大小写
      * @return 1：低，2：中，3：高，4：完美
      */
-    fun getPasswordLevel(password: String, caseSensitive: Boolean): Int {
-        var password = password
+    fun getPasswordLevel(pswd: String, caseSensitive: Boolean): Int {
+        var password = pswd
         var ch: Char
         var hasUpper = false // 包含大写字母
         var hasLower = false // 包含小写字母
         var hasSymbol = false // 包含符号
         var hasNumber = false // 包含数字
 
-        if (StrUtil.isEmpty2(password)) {
+        if (isEmpty2(password)) {
             return 1
         }
 
@@ -634,8 +622,6 @@ object StrUtil {
             count++
         }
 
-        val result = if (count > 1) count else 1
-
         return if (count > 1) count else 1
     }
 
@@ -660,3 +646,4 @@ object StrUtil {
         return buff.toString().replace(" ".toRegex(), "_")
     }
 }
+
