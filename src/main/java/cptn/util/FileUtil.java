@@ -125,7 +125,7 @@ public class FileUtil {
 	 * @return
 	 */
 	public static String getFileName(String filePathName) {
-		if (StrUtil.isEmpty2(filePathName)) {
+		if (StrUtil.INSTANCE.isEmpty2(filePathName)) {
 			return "";
 		}
 
@@ -151,7 +151,7 @@ public class FileUtil {
 	public static String[] getFilePathName(String filePathName) {
 		String[] data = { "", "" };
 		
-		if (StrUtil.isEmpty2(filePathName)) {
+		if (StrUtil.INSTANCE.isEmpty2(filePathName)) {
 			return data;
 		}
 
@@ -188,7 +188,7 @@ public class FileUtil {
 	public static String getFileExt(String pathFileName) {
 		String fileName = getFileName(pathFileName);
 
-		if (StrUtil.isEmpty2(fileName)) {
+		if (StrUtil.INSTANCE.isEmpty2(fileName)) {
 			return "";
 		}
 
@@ -217,17 +217,17 @@ public class FileUtil {
 	 * @return
 	 */
 	public static String appendFileName(String path, String fileName) {
-		path = StrUtil.safeTrim2(path);
-		fileName = StrUtil.safeTrim2(fileName);
+		path = StrUtil.INSTANCE.safeTrim2(path);
+		fileName = StrUtil.INSTANCE.safeTrim2(fileName);
 		
 		boolean b1 = false;
 		boolean b2 = false;
 		
-		if (StrUtil.isEmpty(path)) {
+		if (StrUtil.INSTANCE.isEmpty(path)) {
 			return fileName;
 		}
 		
-		if (StrUtil.isEmpty(fileName)) {
+		if (StrUtil.INSTANCE.isEmpty(fileName)) {
 			return path;
 		}
 		
@@ -259,10 +259,10 @@ public class FileUtil {
 	 * @return
 	 */
 	public static String appendFileExt(String fileName, String ext) {
-		fileName = StrUtil.safeTrim2(fileName);
-		ext = StrUtil.safeTrim2(ext);
+		fileName = StrUtil.INSTANCE.safeTrim2(fileName);
+		ext = StrUtil.INSTANCE.safeTrim2(ext);
 		
-		if (StrUtil.isEmpty2(ext)) {
+		if (StrUtil.INSTANCE.isEmpty2(ext)) {
 			return fileName;
 		}
 		

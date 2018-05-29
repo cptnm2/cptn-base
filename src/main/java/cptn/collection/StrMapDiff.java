@@ -6,6 +6,6 @@ public class StrMapDiff<V> extends MapDiff<String> {
 
 	@Override
 	protected boolean isEqual(String k1, String k2) {
-		return StrUtil.isEqual(k1, k2);
+		return StrUtil.INSTANCE.isEqual(k1, k2);
 	}
 }

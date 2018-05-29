@@ -345,7 +345,7 @@ public class FieldValidator {
 	 * @return
 	 */
 	public static boolean isContainsSpecialChar(String text) {
-		if (StrUtil.isEmpty(text))
+		if (StrUtil.INSTANCE.isEmpty(text))
 			return false;
 		String[] chars = { "[", "`", "~", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "+", "=", "|", "{", "}",
 				"'", ":", ";", "'", ",", "[", "]", ".", "<", ">", "/", "?", "~", "！", "@", "#", "￥", "%", "…", "&", "*",
@@ -444,7 +444,7 @@ public class FieldValidator {
 	 *
 	 */
 	private static boolean match(String text, String reg) {
-		if (StrUtil.isEmpty(text) || StrUtil.isEmpty(reg)) {
+		if (StrUtil.INSTANCE.isEmpty(text) || StrUtil.INSTANCE.isEmpty(reg)) {
 			return false;
 		}
 		return Pattern.compile(reg).matcher(text).matches();

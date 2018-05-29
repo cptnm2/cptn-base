@@ -109,7 +109,7 @@ public class DateUtil {
 	 * @return
 	 */
 	public static Date parse(String date, String pattern) {
-		if (StrUtil.isEmpty2(date)) {
+		if (StrUtil.INSTANCE.isEmpty2(date)) {
 			return null;
 		}
 
@@ -127,7 +127,7 @@ public class DateUtil {
 	 * @return
 	 */
 	public static Date parseDate(String date) {
-		if (StrUtil.isEmpty2(date)) {
+		if (StrUtil.INSTANCE.isEmpty2(date)) {
 			return null;
 		}
 		

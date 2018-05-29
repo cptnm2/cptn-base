@@ -42,7 +42,7 @@ public class XmlNode implements Serializable {
 	}
 
 	public void setName(String name) {
-		this.name = StrUtil.safeTrim2(name);
+		this.name = StrUtil.INSTANCE.safeTrim2(name);
 	}
 
 	public String getText() {
@@ -50,7 +50,7 @@ public class XmlNode implements Serializable {
 	}
 
 	public void setText(String text) {
-		this.text = StrUtil.safeTrim2(text);
+		this.text = StrUtil.INSTANCE.safeTrim2(text);
 	}
 
 	public Map<String, String> getAttrMap() {

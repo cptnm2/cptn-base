@@ -36,7 +36,7 @@ public class EncryptTest {
 	public void testMd5() {
 		String src = "f9867646922249eeb6c42fa52475a68a9ec509094f624f039a5ff7c9a5c7a7f86ICB546LLemjjuaatOeDiOmFkg==114653711516130c0c976cbef34510aa5b62b38f579793";
 		
-		String dest = StrUtil.byteArrayToHexStr(Coder.getMd5(src));
+		String dest = StrUtil.INSTANCE.byteArrayToHexStr(Coder.getMd5(src));
 		
 		System.out.println(dest);
 	}

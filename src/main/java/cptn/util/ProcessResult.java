@@ -113,7 +113,7 @@ public class ProcessResult implements Serializable {
 	}
 	
 	public void putData(String key, Object value) {
-		if (StrUtil.isEmpty2(key)) {
+		if (StrUtil.INSTANCE.isEmpty2(key)) {
 			return;
 		}
 		
@@ -121,7 +121,7 @@ public class ProcessResult implements Serializable {
 	}
 	
 	public Object getData(String key) {
-		if (StrUtil.isEmpty2(key)) {
+		if (StrUtil.INSTANCE.isEmpty2(key)) {
 			return null;
 		}
 		

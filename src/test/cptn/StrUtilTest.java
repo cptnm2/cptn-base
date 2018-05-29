@@ -11,13 +11,20 @@ public class StrUtilTest {
 	@Test
 	public void testDecimal() {
 		String value = "10101";
-		assertTrue(StrUtil.safeParseDecimal(value).intValue() == 10101);
+		assertTrue(StrUtil.INSTANCE.safeParseDecimal(value).intValue() == 10101);
 		
 		value = "-1";
-		assertTrue(StrUtil.safeParseDecimal(value).intValue() == -1);
+		assertTrue(StrUtil.INSTANCE.safeParseDecimal(value).intValue() == -1);
 		
 		value = "dna";
-		assertTrue(StrUtil.safeParseDecimal(value).intValue() == 0);
+		assertTrue(StrUtil.INSTANCE.safeParseDecimal(value).intValue() == 0);
+	}
+
+	@Test
+	public void testHexStr() {
+		byte[] data = {1, 2, 10, 22};
+
+		System.out.println(StrUtil.INSTANCE.byteArrayToHexStr(data));
 	}
 	
 	@Test
@@ -43,19 +50,19 @@ public class StrUtilTest {
 	
 	@Test
 	public void testPasswordLevel() {
-		assertEquals(StrUtil.getPasswordLevel(null, true), 1);
-		assertEquals(StrUtil.getPasswordLevel("", true), 1);
-		assertEquals(StrUtil.getPasswordLevel("   ", true), 1);
-		assertEquals(StrUtil.getPasswordLevel("123", true), 1);
-		assertEquals(StrUtil.getPasswordLevel("ddd", true), 1);
-		assertEquals(StrUtil.getPasswordLevel("ACD", true), 1);
+		assertEquals(StrUtil.INSTANCE.getPasswordLevel(null, true), 1);
+		assertEquals(StrUtil.INSTANCE.getPasswordLevel("", true), 1);
+		assertEquals(StrUtil.INSTANCE.getPasswordLevel("   ", true), 1);
+		assertEquals(StrUtil.INSTANCE.getPasswordLevel("123", true), 1);
+		assertEquals(StrUtil.INSTANCE.getPasswordLevel("ddd", true), 1);
+		assertEquals(StrUtil.INSTANCE.getPasswordLevel("ACD", true), 1);
 		
-		assertEquals(StrUtil.getPasswordLevel("ACDSes", true), 2);
-		assertEquals(StrUtil.getPasswordLevel("ACDSes", false), 1);
+		assertEquals(StrUtil.INSTANCE.getPasswordLevel("ACDSes", true), 2);
+		assertEquals(StrUtil.INSTANCE.getPasswordLevel("ACDSes", false), 1);
 		
-		assertEquals(StrUtil.getPasswordLevel("ACDSes3", true), 3);
-		assertEquals(StrUtil.getPasswordLevel("ACDSes_3", true), 4);
+		assertEquals(StrUtil.INSTANCE.getPasswordLevel("ACDSes3", true), 3);
+		assertEquals(StrUtil.INSTANCE.getPasswordLevel("ACDSes_3", true), 4);
 		
-		assertEquals(StrUtil.getPasswordLevel("ACDSes_3", false), 3);
+		assertEquals(StrUtil.INSTANCE.getPasswordLevel("ACDSes_3", false), 3);
 	}
 }
