@@ -1,7 +1,7 @@
 /**
  * AES 加密/解密工具
- * @author cptn
  */
+
 package cptn.encryption
 
 import java.security.InvalidParameterException
@@ -11,21 +11,21 @@ import javax.crypto.Cipher
 
 import javax.crypto.KeyGenerator
 
-open class Aes(key: String, keyLen: Int) : BaseCoder() {
+open class Aes(key: String, keyLen: Int) : BaseCodec() {
     companion object {
         // 算法
-        val KEY_ALGORITHM = "AES"
+        const val KEY_ALGORITHM = "AES"
 
         // 模式
-        val DEF_ENC_ALGORITHM = "AES/ECB/PKCS5Padding"
-        val DEF_DEC_ALGORITHM = "AES/ECB/NoPadding"
+        const val DEF_ENC_ALGORITHM = "AES/ECB/PKCS5Padding"
+        const val DEF_DEC_ALGORITHM = "AES/ECB/NoPadding"
 
         // 加密位数
-        val KEY_LEN_128 = 128
-        val KEY_LEN_256 = 256
+        const val KEY_LEN_128 = 128
+        const val KEY_LEN_256 = 256
     }
 
-    override var keyLength: Int = 128
+    override var keyLength: Int = Aes.KEY_LEN_128
         set(value) {
             if (value == Aes.KEY_LEN_128 || value == Aes.KEY_LEN_256) {
                 field = value

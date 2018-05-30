@@ -1,5 +1,6 @@
 package cptn
 
+import cptn.business.ChineseMoney
 import org.junit.Assert.*
 import org.junit.Test
 import java.io.UnsupportedEncodingException
@@ -9,24 +10,18 @@ import cptn.util.StrUtil
 
 open class Base() {
     init {
-        println("Init Base")
+        // println("Init Base")
     }
 }
 
 
 class KTest() : Base() {
     init {
-        println("Init KTest")
+        // println("Init KTest")
     }
 
     @Test
     fun test() {
-        println("Begin test")
-
-
-
-
-        println("End test")
     }
 
     fun testLoop() {
@@ -55,18 +50,6 @@ class KTest() : Base() {
 
         value = "dna"
         assertTrue(StrUtil.safeParseDecimal(value).toInt() == 0)
-    }
-
-    @Test
-    fun testChinese() {
-        //		System.out.println("转换中文金额");
-        //		System.out.println("-------------------------");
-        //		System.out.println("25000000000005.999: " + ChineseMoney.toChinese(25000000000005.999));
-        //		System.out.println("45689263.626: " + ChineseMoney.toChinese(45689263.626));
-        //		System.out.println("0.69457: " + ChineseMoney.toChinese(0.69457));
-        //		System.out.println("250.0: " + ChineseMoney.toChinese(250.0));
-        //		System.out.println("0: " + ChineseMoney.toChinese(0));
-        //		System.out.println("-------------------------");
     }
 
     @Test

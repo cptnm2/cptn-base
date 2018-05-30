@@ -16,7 +16,7 @@ public class FileUtilTest {
 	}
 	
 	private void testGetFilePathName(String src, String[] expect) {
-		String[] data = FileUtil.getFilePathName(src);
+		String[] data = FileUtil.INSTANCE.getFilePathName(src);
 		
 		if ((!data[0].equalsIgnoreCase(expect[0])) || (!data[1].equalsIgnoreCase(expect[1]))) {
 			fail();
@@ -28,6 +28,6 @@ public class FileUtilTest {
 		String u1 = "http://localhost";
 		String u2 = "/zsgame/index";
 		
-		System.out.println(FileUtil.appendFileName(u1, u2));
+		System.out.println(FileUtil.INSTANCE.appendFileName(u1, u2));
 	}
 }

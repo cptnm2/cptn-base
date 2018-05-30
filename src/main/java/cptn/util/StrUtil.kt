@@ -1,5 +1,3 @@
-@file:JvmName("StrUtil")
-
 package cptn.util
 
 import java.math.BigDecimal
@@ -8,6 +6,7 @@ import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.*
 
+// 字符串处理工具
 object StrUtil {
     // 系统换行符
     val fileSep: String
@@ -199,17 +198,6 @@ object StrUtil {
         }
 
         return data
-    }
-
-    // 判断数组是否存在指定数字
-    fun intInArr(arr: IntArray, key: Int): Boolean {
-        for (i in arr) {
-            if (i == key) {
-                return true
-            }
-        }
-
-        return false
     }
 
     // 生成随机字符串
