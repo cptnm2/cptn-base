@@ -2,7 +2,6 @@
 
 package cptn.util
 
-import java.io.UnsupportedEncodingException
 import java.math.BigDecimal
 import java.nio.charset.Charset
 import java.text.DecimalFormat
@@ -14,68 +13,43 @@ object StrUtil {
     val fileSep: String
         get() = System.getProperty("file.separator")
 
-    /**
-     * Determine if a string is empty (null or "")
-     *
-     * @param value
-     * @return
-     */
+    // 判断字符串是否为空（null || ""）
     fun isEmpty(value: String?): Boolean {
         return null == value || "" == value
     }
 
-    /**
-     * Determine if a string is empty (null or "" or "   ")
-     *
-     * @param value
-     * @return
-     */
+    // 判断字符串是否为空（null || "" || "   "）
     fun isEmpty2(value: String?): Boolean {
         var s = value?.trim()
         return null == s || "" == s
     }
 
-    /**
-     * Safely trim, return null when value is null
-     *
-     * @param value
-     * @return
-     */
+    // 安全去除两端空格（当值为 null 时返回 null）
     fun safeTrim(value: String?): String? {
         return value?.trim { it <= ' ' }
     }
 
-    /**
-     * Safely trim, return "" when value is null
-     *
-     * @param value
-     * @return
-     */
+    // 安全去除两端空格（当值为 null 时返回 ""）
     fun safeTrim2(value: String?): String {
         return if (value == null) {
             ""
         } else value.trim { it <= ' ' }
     }
 
-    /**
-     * 判断两个字符串是否相等(区分大小写)
-     *
-     * @param a
-     * @param b
-     * @return
-     */
-    fun isEqual(a: String?, b: String?): Boolean {
-        if (a == null && b == null) {
-            return true
-        }
-
-        if (a == null && b != null) {
-            return false
-        }
-
-        return if (a != null && b == null) {
+    // 比较字符串是否相等
+    fun isStrEqual(a: String?, b: String?, ignoreCase: Boolean): Boolean {
+        return if (a == null && b == null) {
+            true
+        } else if (a == null || b == null) {
             false
-        } else a == b
+        } else {
+            a.equals(b, ignoreCase)
+        }
+    }
+
+    // 判断两个字符串是否相等(区分大小写)
+    fun isEqual(a: String?, b: String?): Boolean {
+        return isStrEqual(a, b, true)
     }
 
     /**
@@ -86,40 +60,20 @@ object StrUtil {
      * @return
      */
     fun isEqualIgnoreCase(a: String?, b: String?): Boolean {
-        if (a == null && b == null) {
-            return true
-        }
-
-        if (a == null && b != null) {
-            return false
-        }
-
-        return if (a != null && b == null) {
-            false
-        } else a!!.equals(b!!, ignoreCase = true)
+        return isStrEqual(a, b, false)
     }
 
-    /**
-     * Safely parse an integer, return defValue when exception occurs
-     *
-     * @param value
-     * @return
-     */
+    // 安全将字符串转换成数字
     @JvmOverloads
-    fun safeParseInt(value: String, defValue: Int = 0): Int {
+    fun safeParseInt(value: String?, defValue: Int = 0): Int {
         try {
-            return Integer.parseInt(value)
+            return value?.toInt() ?: defValue
         } catch (e: Exception) {
             return defValue
         }
     }
 
-    /**
-     * Safely parse a decimal, return defValue when exception occurs
-     *
-     * @param value
-     * @return
-     */
+    // 安全将字符串转换成资金
     @JvmOverloads
     fun safeParseDecimal(value: String, defValue: BigDecimal = BigDecimal.ZERO): BigDecimal {
         try {
@@ -129,42 +83,24 @@ object StrUtil {
         }
     }
 
-    /**
-     * Generate a UUID with 36 chars, including 4 "-"
-     *
-     * @return
-     */
+    // 生成36位的 GUID，其中包含4个"-"
     fun genUUID(): String {
         return UUID.randomUUID().toString()
     }
 
-    /**
-     * Generate a UUID with 32 chars, without "-"
-     *
-     * @return
-     */
+    // 生成32位的 GUID，不包含"-"
     fun genUUID32(): String {
         return UUID.randomUUID().toString().replace("-", "")
     }
 
-    /**
-     * Change first char to upper
-     *
-     * @param value
-     * @return
-     */
-    fun firstCharUpper(value: String): String {
-        return if (isEmpty(value)) {
+    // 首字符大写
+    fun firstCharUpper(value: String?): String {
+        return if (value == null) {
             ""
         } else value.substring(0, 1).toUpperCase() + value.substring(1)
     }
 
-    /**
-     * Determine if a char is a Chinese char
-     *
-     * @param c
-     * @return
-     */
+    // 判断是否中文字符
     fun isChinese(c: Char): Boolean {
         val ub = Character.UnicodeBlock.of(c)
 
@@ -178,12 +114,7 @@ object StrUtil {
         } else false
     }
 
-    /**
-     * Determine if a string contains Chinese chars
-     *
-     * @param s
-     * @return
-     */
+    // 判断是否包含中文字符
     fun containsChinese(s: String?): Boolean {
         if (s == null) {
             return false
@@ -198,30 +129,14 @@ object StrUtil {
         return false
     }
 
-    /**
-     * Truncate the head of a string, which Chinese chars take 2 chars place
-     *
-     * @param src
-     * @param maxLength
-     * @return
-     */
     fun truncHead(src: String, maxLength: Int): String {
         if (isEmpty(src) || maxLength <= 0) {
             return ""
         }
 
-        var len: Int
         var totalLen = 0
         for (i in 0 until src.length) {
-            val c = src[i]
-
-            if (isChinese(c)) {
-                len = 2
-            } else {
-                len = 1
-            }
-
-            totalLen += len
+            totalLen += if (isChinese(src[i])) 2 else 1
 
             if (totalLen > maxLength) {
                 return src.substring(0, i)
@@ -233,14 +148,7 @@ object StrUtil {
         return src
     }
 
-    /**
-     * 截取字符串头部指定长度的子字符串, 中文长度X2, 如果字符串被截断, 自动加上后缀
-     *
-     * @param src
-     * @param maxLength
-     * @param suffix
-     * @return
-     */
+    // 截取指定长度字符串，中文字符长度为2，如果字符串被截断, 自动加上后缀
     fun truncHead2(src: String, maxLength: Int, suffix: String): String {
         var dst = truncHead(src, maxLength)
 
@@ -251,65 +159,34 @@ object StrUtil {
         return dst
     }
 
-    /**
-     * Ascii to UTF-8
-     *
-     * @param param
-     * @return
-     */
     fun ansiToUtf8(param: String): String {
-        if (isEmpty(param)) {
-            return ""
+        return if (param == null) {
+            ""
         }
-
-        try {
-            return String(param.toByteArray(Charset.forName("ISO8859_1")), Charset.forName("UTF-8"))
-        } catch (e: UnsupportedEncodingException) {
-            println(e)
+        else {
+            String(param.toByteArray(Charset.forName("ISO-8859-1")), Charset.forName("UTF-8"))
         }
-
-        return ""
     }
 
-    /**
-     * UTF-8 to Ascii
-     *
-     * @param param
-     * @return
-     */
-    fun utf8ToAnsi(param: String): String {
-        if (isEmpty(param)) {
-            return ""
+    fun utf8ToAnsi(param: String?): String {
+        return if (param == null) {
+            ""
         }
-
-        try {
-            return String(param.toByteArray(charset("UTF-8")), Charset.forName("ISO8859_1"))
-        } catch (e: UnsupportedEncodingException) {
+        else {
+            String(param.toByteArray(Charset.forName("UTF-8")), Charset.forName("ISO-8859-1"))
         }
-
-        return ""
     }
 
     fun ansiToGBK(param: String): String {
-        if (isEmpty(param)) {
-            return ""
+        return if (param == null) {
+            ""
         }
-
-        try {
-            return String(param.toByteArray(charset("ISO8859_1")), Charset.forName("GBK"))
-        } catch (e: UnsupportedEncodingException) {
+        else {
+            String(param.toByteArray(Charset.forName("ISO-8859-1")), Charset.forName("GBK"))
         }
-
-        return ""
     }
 
-    /**
-     * Split a string, and safely trim each element
-     *
-     * @param src
-     * @param delimeter
-     * @return
-     */
+    // 分解字符串，并将每个元素安全去掉空格
     fun safeSplit(src: String, delimeter: String): Array<String> {
         if (isEmpty2(src)) {
             return arrayOf("")
@@ -324,69 +201,27 @@ object StrUtil {
         return data
     }
 
-    /**
-     * Truncate the head of a string, and will append "..." at the end if the
-     * length is overflow
-     *
-     * @param src
-     * @param maxCharLen
-     * @return
-     */
-    fun getHead(src: String, maxCharLen: Int): String {
-        var len = 0
-
-        for (i in 0 until src.length) {
-            if (isChinese(src[i])) {
-                len += 2
-            } else {
-                len++
-            }
-
-            if (len > maxCharLen) {
-                return src.substring(0, i) + "..."
-            } else if (len == maxCharLen) {
-                if (i < src.length - 1) {
-                    // 长度相等且不是结�?
-                    return src.substring(0, i + 1) + "..."
-                }
-            }
-        }
-
-        return src
-    }
-
-    /**
-     * Determine if an integer exists in an array
-     *
-     * @param arrs
-     * @param key
-     * @return
-     */
-    fun intInArr(arrs: IntArray?, key: Int): Boolean {
-        if (arrs == null || arrs.size == 0) {
-            return false
-        }
-
-        for (i in arrs) {
+    // 判断数组是否存在指定数字
+    fun intInArr(arr: IntArray, key: Int): Boolean {
+        for (i in arr) {
             if (i == key) {
                 return true
             }
         }
+
         return false
     }
 
-    /**
-     * Generate random string
-     *
-     * @param chars
-     * @param len
-     * @return
-     */
+    // 生成随机字符串
     fun genRandomStr(chars: String, len: Int): String {
+        if (chars.isEmpty() || len <= 0) {
+            return ""
+        }
+
         val buff = StringBuffer()
         val ran = Random()
 
-        for (i in 0 until len) {
+        for (i in 0..len) {
             val pos = ran.nextInt(chars.length)
             buff.append(chars[pos])
         }
@@ -394,13 +229,7 @@ object StrUtil {
         return buff.toString()
     }
 
-    /**
-     * Concat multiple strings with sep
-     *
-     * @param list
-     * @param sep
-     * @return
-     */
+    // 连接多个字符串
     fun joinStrs(list: List<String>, sep: String, leftQuote: String? = null, rightQuote: String? = null): String {
         val buff = StringBuffer()
 
@@ -426,46 +255,23 @@ object StrUtil {
         return buff.toString()
     }
 
-    /**
-     * 格式化金额
-     *
-     * @param val
-     * @return
-     */
-    fun formatMoney(`val`: BigDecimal): String {
-        return formatNumber(`val`, "###0.00")
+    // 格式化金额
+    fun formatMoney(value: BigDecimal): String {
+        return formatNumber(value, "###0.00")
     }
 
-    /**
-     * 格式化实数
-     *
-     * @param val
-     * @param digit
-     * @return
-     */
-    fun formatNumber(`val`: Float, digit: Int): String {
-        return formatNumber(BigDecimal(`val`.toDouble()), digit)
+    // 格式化实数
+    fun formatNumber(value: Float, digit: Int): String {
+        return formatNumber(BigDecimal(value.toDouble()), digit)
     }
 
-    /**
-     * 格式化实数
-     *
-     * @param val
-     * @param digit
-     * @return
-     */
-    fun formatNumber(`val`: Double, digit: Int): String {
-        return formatNumber(BigDecimal(`val`), digit)
+    // 格式化实数
+    fun formatNumber(value: Double, digit: Int): String {
+        return formatNumber(BigDecimal(value), digit)
     }
 
-    /**
-     * 格式化实数
-     *
-     * @param val
-     * @param digit
-     * @return
-     */
-    fun formatNumber(`val`: BigDecimal, digit: Int): String {
+    // 格式化实数
+    fun formatNumber(value: BigDecimal, digit: Int): String {
         val buff = StringBuffer()
 
         buff.append("###0")
@@ -478,79 +284,61 @@ object StrUtil {
             }
         }
 
-        return formatNumber(`val`, buff.toString())
+        return formatNumber(value, buff.toString())
     }
 
-    /**
-     * 格式化实数
-     *
-     * @param val
-     * @param pattern
-     * @return
-     */
-    fun formatNumber(`val`: BigDecimal, pattern: String): String {
+    // 格式化实数
+    fun formatNumber(value: BigDecimal, pattern: String): String {
         val nf = NumberFormat.getNumberInstance() as DecimalFormat
         nf.applyPattern(pattern)
-        return nf.format(`val`)
+        return nf.format(value)
     }
 
-    /**
-     * 字节数组转换成十六进制字符串
-     *
-     * @param buf
-     * @return
-     */
-    fun byteArrayToHexStr(buf: ByteArray): String {
+    // 字节数组转换成十六进制字符串
+    fun byteArrayToHexStr(arr: ByteArray): String {
         val sb = StringBuffer()
         var hex: String
 
-        for (i in buf.indices) {
-            hex = Integer.toHexString(buf[i].toInt())
+        for (b in arr) {
+            hex = Integer.toHexString(b.toInt())
+
             if (hex.length == 1) {
                 sb.append("0")
             }
-            sb.append(hex.toLowerCase())
+
+            sb.append(hex)
         }
 
         return sb.toString()
     }
 
-    /**
-     * 十六进制字符串转换成字节数组
-     *
-     * @param hexStr
-     * @return
-     */
-    fun hexStrToByteArray(hexStr: String): ByteArray? {
-        if (isEmpty(hexStr)) {
-            return null
+    // 十六进制字符串转换成字节数组
+    fun hexStrToByteArray(hexStr: String): ByteArray {
+        if (hexStr.isEmpty()) {
+            return ByteArray(0)
         }
 
-        val result = ByteArray(hexStr.length / 2)
+        val len: Int = hexStr.length / 2
+        val arr = ByteArray(len)
 
-        for (i in 0 until hexStr.length / 2) {
+        for (i in 0..len) {
             val high = Integer.parseInt(hexStr.substring(i * 2, i * 2 + 1), 16)
             val low = Integer.parseInt(hexStr.substring(i * 2 + 1, i * 2 + 2), 16)
 
-            result[i] = (high * 16 + low).toByte()
+            arr[i] = (high * 16 + low).toByte()
         }
 
-        return result
+        return arr
     }
 
-    /**
-     * 将字符串中间变成星号，比如银行卡号 变成 6225********2345
-     * @param frontLen 前端长度
-     * @param rearLen 后端长度
-     * @return
-     */
+    // 将字符串中间变成星号，比如银行卡号 变成 6225********2345
     fun hideMidStr(src: String, frontLen: Int, rearLen: Int): String? {
         if (frontLen < 0 || rearLen < 0) {
             return src
         }
 
-        if (isEmpty(src)) {
-            return src
+        if (src.isEmpty()) {
+            return ""
         }
 
         val len = src.length
@@ -559,23 +347,18 @@ object StrUtil {
             return src
         } else {
             val buff = StringBuffer(src.substring(0, frontLen))
+            val starLen = len - frontLen - rearLen
 
-            for (i in 0 until len - frontLen - rearLen) {
+            for (i in 0..starLen) {
                 buff.append("*")
             }
 
             buff.append(src.substring(len - rearLen))
-
             return buff.toString()
         }
     }
 
-    /**
-     * 判断密码强度
-     * @param pswd
-     * @param caseSensitive 是否区分大小写
-     * @return 1：低，2：中，3：高，4：完美
-     */
+    // 判断密码强度（1：低，2：中，3：高，4：完美）
     fun getPasswordLevel(pswd: String, caseSensitive: Boolean): Int {
         var password = pswd
         var ch: Char
@@ -595,13 +378,14 @@ object StrUtil {
         for (i in 0 until password.length) {
             ch = password[i]
 
-            if (ch >= 'A' && ch <= 'Z') {
+            if (ch in 'A'..'Z') {
                 hasUpper = true
-            } else if (ch >= 'a' && ch <= 'z') {
+            } else if (ch in 'a'..'z') {
                 hasLower = true
-            } else if (ch >= '0' && ch <= '9') {
+            } else if (ch in '0'..'9') {
                 hasNumber = true
-            } else { // 数字、字母以外的都算符号
+            } else {
+                // 数字、字母以外的都算符号
                 hasSymbol = true
             }
         }
@@ -622,15 +406,10 @@ object StrUtil {
             count++
         }
 
-        return if (count > 1) count else 1
+        return count
     }
 
-    /**
-     * 把参数连接成一个字符串，并在中间加上下划线(空指针会输出null)
-     * 主要用于创建一个特有的字符串，比如缓存的key
-     * @param args
-     * @return
-     */
+    // 把参数连接成一个字符串，并在中间加上下划线（空指针会输出 null）
     fun genQueryKey(vararg args: Any): String {
         val buff = StringBuffer()
         for (obj in args) {

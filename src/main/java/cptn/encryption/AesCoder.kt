@@ -1,3 +1,7 @@
+/**
+ * AES 加密/解密工具
+ * @author cptn
+ */
 package cptn.encryption
 
 import java.security.InvalidParameterException
@@ -7,10 +11,6 @@ import javax.crypto.Cipher
 
 import javax.crypto.KeyGenerator
 
-/**
- * AES 加密/解密工具
- * @author cptn
- */
 open class Aes(key: String, keyLen: Int) : BaseCoder() {
     companion object {
         // 算法
@@ -56,7 +56,7 @@ open class Aes(key: String, keyLen: Int) : BaseCoder() {
     }
 }
 
-
+// AES加密
 class AesEncoder(key: String, keyLen: Int) : Aes(key, keyLen), Encrypt {
     init {
         algo = Aes.DEF_ENC_ALGORITHM
@@ -77,6 +77,7 @@ class AesEncoder(key: String, keyLen: Int) : Aes(key, keyLen), Encrypt {
     }
 }
 
+// AES解密
 class AesDecoder(key: String, keyLen: Int) : Aes(key, keyLen), Decrypt {
     init {
         algo = Aes.DEF_DEC_ALGORITHM

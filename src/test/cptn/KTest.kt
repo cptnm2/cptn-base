@@ -1,9 +1,10 @@
 package cptn
 
-import cptn.util.StrUtil
-import junit.framework.Assert.assertTrue
+import org.junit.Assert.*
 import org.junit.Test
 import java.io.UnsupportedEncodingException
+
+import cptn.util.StrUtil
 
 
 open class Base() {
@@ -89,4 +90,25 @@ class KTest() : Base() {
         assertTrue(!StrUtil.isEmpty2("ABCD"))
     }
 
+    @Test
+    fun testTrim() {
+        assertEquals(StrUtil.safeTrim(null), null)
+        assertEquals(StrUtil.safeTrim(""), "")
+        assertEquals(StrUtil.safeTrim("  "), "")
+        assertEquals(StrUtil.safeTrim(" AAA "), "AAA")
+
+        assertEquals(StrUtil.safeTrim2(null), "")
+        assertEquals(StrUtil.safeTrim2(""), "")
+        assertEquals(StrUtil.safeTrim2("  "), "")
+        assertEquals(StrUtil.safeTrim2(" AAA "), "AAA")
+    }
+
+    @Test
+    fun testParseInt() {
+        assertEquals(StrUtil.safeParseInt(null, 0), 0)
+        assertEquals(StrUtil.safeParseInt("", 0), 0)
+        assertEquals(StrUtil.safeParseInt("abc", 0), 0)
+        assertEquals(StrUtil.safeParseInt("123.4", 0), 0)
+        assertEquals(StrUtil.safeParseInt("123", 0), 123)
+    }
 }
