@@ -1,5 +1,7 @@
 package cptn.reflect;
 
+import cptn.util.StrUtil;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -66,7 +68,7 @@ public class ReflectionUtil {
     public static Class<?> getClass(Type type)
             throws ClassNotFoundException {
         String className = getClassName(type);
-        if (className == null || className.isEmpty()) {
+        if (StrUtil.INSTANCE.isEmpty(className)) {
             return null;
         }
         return Class.forName(className);
